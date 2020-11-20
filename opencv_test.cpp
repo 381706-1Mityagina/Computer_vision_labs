@@ -1,7 +1,9 @@
 ﻿#include <iostream>
 #include "contrast.h"
+#include "canny.h"
+#include "edge_points.h"
 
-void task_one(Mat image) { // перевод изображения в полутоновое
+void grayscale(Mat image) { // перевод изображения в полутоновое
 	Mat r, g, b;
 	vector<Mat> channels(3); // вектор для каналов
 	int N = image.cols * image.rows;
@@ -28,7 +30,7 @@ void task_one(Mat image) { // перевод изображения в полу�
 	waitKey(0);
 }
 
-void task_two(Mat image) {
+void contrast(Mat image) {
 	Mat hist1, hist2, gray;
 	int histSize = 256;
 	int channels[] = { 0 };
@@ -38,7 +40,7 @@ void task_two(Mat image) {
 	cvtColor(image, gray, COLOR_BGR2GRAY);
 	Mat out = gray.clone();
 
-	histStretch(gray, out); //eq
+	histStretch(gray, out);
 
 	calcHist(&gray, 1, channels, Mat(), hist1, 1, &histSize, &histRange);
 	Mat showHist1(256, 256, CV_8UC1, Scalar(255));
@@ -62,23 +64,29 @@ void task_two(Mat image) {
 	waitKey(0);
 }
 
+void canny_edge(const Mat& input, float s, bool denoise) {
+	imshow("threshold", threshold(input, s));
+	imshow("+ denoising", threshold(input, s, denoise));
+	imshow("canny", canny(input, s));
+}
+
 int main()
 {
 	// ---------------------------------------------------------------------
 	Mat image = imread("moment1.jpg", IMREAD_COLOR);
-	imshow("Input", image);
-
-	if (!image.data)
-	{
-		cout << "Could not open or find the image" << std::endl;
-		return -1;
-	}
+	imshow("input", image);
 	// ---------------------------------------------------------------------
-	task_one(image);
-
+	//grayscale(image);
+	//// ---------------------------------------------------------------------
+	//contrast(image);
+	//// ---------------------------------------------------------------------
+	//Mat image_canny = imread("home.jpg", IMREAD_COLOR);
+	//imshow("input", image_canny);
+	//canny_edge(image_canny, 5, true);
 	// ---------------------------------------------------------------------
-	task_two(image);
-	// ---------------------------------------------------------------------
+	Mat image_mor = imread("board.jpg", IMREAD_COLOR);
+	imshow("input", image_mor);
+	Moravec(image_mor);
 
 	waitKey(0);
 	return 0;
