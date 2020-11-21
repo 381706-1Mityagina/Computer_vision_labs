@@ -3,6 +3,22 @@
 #include "canny.h"
 #include "edge_points.h"
 
+void DistTrans(Mat input) {
+	// Creating an empty matrix to store the results
+	Mat dst, bw;
+	cvtColor(input, bw, COLOR_BGR2GRAY);
+	threshold(bw, bw, 40, 255, THRESH_BINARY | THRESH_OTSU);
+	//imshow("dist biniry", bw);
+
+	// Applying distance transform
+	distanceTransform(bw, dst, DIST_L2, 3);
+
+	// Writing the image
+	imwrite("distnceTransform.jpg", dst);
+	Mat image_canny = imread("distnceTransform.jpg", IMREAD_COLOR);
+	imshow("distnceTransform", image_canny);
+}
+
 void grayscale(Mat image) { // перевод изображения в полутоновое
 	Mat r, g, b;
 	vector<Mat> channels(3); // вектор для каналов
@@ -75,9 +91,9 @@ int main()
 	Mat image = imread("moment1.jpg", IMREAD_COLOR);
 	imshow("input", image);
 	// ---------------------------------------------------------------------
-	//grayscale(image);
-	//// ---------------------------------------------------------------------
-	//contrast(image);
+	grayscale(image);
+	// ---------------------------------------------------------------------
+	contrast(image);
 	// ---------------------------------------------------------------------
 	Mat image_canny = imread("board.jpg", IMREAD_COLOR);
 	imshow("input", image_canny);
@@ -85,6 +101,10 @@ int main()
 	// ---------------------------------------------------------------------
 	Mat image_mor = imread("canny.jpg", IMREAD_COLOR);
 	Moravec(image_mor);
+	// ---------------------------------------------------------------------
+	Mat image_dist = imread("board.jpg", IMREAD_COLOR);
+	//imshow("dist input", image_dist);
+	DistTrans(image_dist);
 
 	waitKey(0);
 	return 0;
