@@ -14,10 +14,8 @@ void grayscale(Mat image) { // перевод изображения в полу
 	g = channels[1];
 	b = channels[2];
 
-	for (int i = 0; i < image.cols; i++)
-	{
-		for (int j = 0; j < image.rows; j++)
-		{
+	for (int i = 0; i < image.cols; i++) {
+		for (int j = 0; j < image.rows; j++) {
 			auto y = r.at<uchar>(Point(i, j)) * 0.2952 + g.at<uchar>(Point(i, j)) * 0.5947 + b.at<uchar>(Point(i, j)) * 0.11;
 			r.at<uchar>(Point(i, j)) = y;
 			g.at<uchar>(Point(i, j)) = y;
@@ -65,9 +63,10 @@ void contrast(Mat image) {
 }
 
 void canny_edge(const Mat& input, float s, bool denoise) {
-	imshow("threshold", threshold(input, s));
-	imshow("+ denoising", threshold(input, s, denoise));
+	//imshow("threshold", threshold(input, s));
+	//imshow("+ denoising", threshold(input, s, denoise));
 	imshow("canny", canny(input, s));
+	imwrite("canny.jpg", canny(input, s));
 }
 
 int main()
@@ -79,13 +78,12 @@ int main()
 	//grayscale(image);
 	//// ---------------------------------------------------------------------
 	//contrast(image);
-	//// ---------------------------------------------------------------------
-	//Mat image_canny = imread("home.jpg", IMREAD_COLOR);
-	//imshow("input", image_canny);
-	//canny_edge(image_canny, 5, true);
 	// ---------------------------------------------------------------------
-	Mat image_mor = imread("board.jpg", IMREAD_COLOR);
-	imshow("input", image_mor);
+	Mat image_canny = imread("board.jpg", IMREAD_COLOR);
+	imshow("input", image_canny);
+	canny_edge(image_canny, 5, true);
+	// ---------------------------------------------------------------------
+	Mat image_mor = imread("canny.jpg", IMREAD_COLOR);
 	Moravec(image_mor);
 
 	waitKey(0);
