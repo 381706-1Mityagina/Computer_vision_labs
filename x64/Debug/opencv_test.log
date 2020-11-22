@@ -1,0 +1,23 @@
+﻿  opencv_test.cpp
+C:\Users\dmityagi\OneDrive - Intel Corporation\Desktop\cv\fix\Computer_vision_labs\contrast.h(40,13): warning C4244:  'return': conversion from 'float' to 'int', possible loss of data
+C:\Users\dmityagi\OneDrive - Intel Corporation\Desktop\cv\fix\Computer_vision_labs\contrast.h(99,14): warning C4244:  'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\dmityagi\OneDrive - Intel Corporation\Desktop\cv\fix\Computer_vision_labs\edge_points.h(22,88): warning C4244:  '+=': conversion from 'double' to 'int', possible loss of data
+C:\Users\dmityagi\OneDrive - Intel Corporation\Desktop\cv\fix\Computer_vision_labs\edge_points.h(27,88): warning C4244:  '+=': conversion from 'double' to 'int', possible loss of data
+C:\Users\dmityagi\OneDrive - Intel Corporation\Desktop\cv\fix\Computer_vision_labs\edge_points.h(32,92): warning C4244:  '+=': conversion from 'double' to 'int', possible loss of data
+C:\Users\dmityagi\OneDrive - Intel Corporation\Desktop\cv\fix\Computer_vision_labs\edge_points.h(37,92): warning C4244:  '+=': conversion from 'double' to 'int', possible loss of data
+C:\Users\dmityagi\OneDrive - Intel Corporation\Desktop\cv\fix\Computer_vision_labs\opencv_test.cpp(61,31): warning C4244:  '=': conversion from 'double' to '_Tp', possible loss of data
+C:\Users\dmityagi\OneDrive - Intel Corporation\Desktop\cv\fix\Computer_vision_labs\opencv_test.cpp(61,31): warning C4244:         with
+C:\Users\dmityagi\OneDrive - Intel Corporation\Desktop\cv\fix\Computer_vision_labs\opencv_test.cpp(61,31): warning C4244:         [
+C:\Users\dmityagi\OneDrive - Intel Corporation\Desktop\cv\fix\Computer_vision_labs\opencv_test.cpp(61,31): warning C4244:             _Tp=uchar
+C:\Users\dmityagi\OneDrive - Intel Corporation\Desktop\cv\fix\Computer_vision_labs\opencv_test.cpp(61,31): warning C4244:         ]
+C:\Users\dmityagi\OneDrive - Intel Corporation\Desktop\cv\fix\Computer_vision_labs\opencv_test.cpp(62,31): warning C4244:  '=': conversion from 'double' to '_Tp', possible loss of data
+C:\Users\dmityagi\OneDrive - Intel Corporation\Desktop\cv\fix\Computer_vision_labs\opencv_test.cpp(62,31): warning C4244:         with
+C:\Users\dmityagi\OneDrive - Intel Corporation\Desktop\cv\fix\Computer_vision_labs\opencv_test.cpp(62,31): warning C4244:         [
+C:\Users\dmityagi\OneDrive - Intel Corporation\Desktop\cv\fix\Computer_vision_labs\opencv_test.cpp(62,31): warning C4244:             _Tp=uchar
+C:\Users\dmityagi\OneDrive - Intel Corporation\Desktop\cv\fix\Computer_vision_labs\opencv_test.cpp(62,31): warning C4244:         ]
+C:\Users\dmityagi\OneDrive - Intel Corporation\Desktop\cv\fix\Computer_vision_labs\opencv_test.cpp(63,31): warning C4244:  '=': conversion from 'double' to '_Tp', possible loss of data
+C:\Users\dmityagi\OneDrive - Intel Corporation\Desktop\cv\fix\Computer_vision_labs\opencv_test.cpp(63,31): warning C4244:         with
+C:\Users\dmityagi\OneDrive - Intel Corporation\Desktop\cv\fix\Computer_vision_labs\opencv_test.cpp(63,31): warning C4244:         [
+C:\Users\dmityagi\OneDrive - Intel Corporation\Desktop\cv\fix\Computer_vision_labs\opencv_test.cpp(63,31): warning C4244:             _Tp=uchar
+C:\Users\dmityagi\OneDrive - Intel Corporation\Desktop\cv\fix\Computer_vision_labs\opencv_test.cpp(63,31): warning C4244:         ]
+  opencv_test.vcxproj -> C:\Users\dmityagi\OneDrive - Intel Corporation\Desktop\cv\fix\Computer_vision_labs\x64\Debug\opencv_test.exe

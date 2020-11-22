@@ -34,16 +34,14 @@ void sobel_denoise(const Mat& input, Mat& Ix, Mat& Iy, Mat& gradient)
 {
 	Mat image;
 	cvtColor(input, image, COLOR_BGR2GRAY);
-
 	Ix = Mat(image.rows, image.cols, CV_32F);
 	Iy = Mat(image.rows, image.cols, CV_32F);
-
 	gradient = Mat(image.rows, image.cols, CV_32F);
 
 	for (int i = 0; i < image.rows; i++) {
 		for (int j = 0; j < image.cols; j++) {
 			float ix, iy;
-			if (i == 0 || i == image.rows - 1 || j == 0 || j == image.cols - 1) {
+			if (i == 0 || i >= image.rows - 1 || j == 0 || j >= image.cols - 1) {
 				ix = 0; iy = 0;
 			} else {
 				ix = ((float(image.at<uchar>(i - 1, j + 1)) - float(image.at<uchar>(i - 1, j - 1)))

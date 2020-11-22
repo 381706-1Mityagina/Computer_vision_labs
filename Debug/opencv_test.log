@@ -1,0 +1,19 @@
+﻿  opencv_test.cpp
+C:\Users\dmityagi\OneDrive - Intel Corporation\Desktop\cv\fix\Computer_vision_labs\contrast.h(40,13): warning C4244:  'return': conversion from 'float' to 'int', possible loss of data
+C:\Users\dmityagi\OneDrive - Intel Corporation\Desktop\cv\fix\Computer_vision_labs\contrast.h(99,14): warning C4244:  'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\dmityagi\OneDrive - Intel Corporation\Desktop\cv\fix\Computer_vision_labs\opencv_test.cpp(22,31): warning C4244:  '=': conversion from 'double' to '_Tp', possible loss of data
+C:\Users\dmityagi\OneDrive - Intel Corporation\Desktop\cv\fix\Computer_vision_labs\opencv_test.cpp(22,31): warning C4244:         with
+C:\Users\dmityagi\OneDrive - Intel Corporation\Desktop\cv\fix\Computer_vision_labs\opencv_test.cpp(22,31): warning C4244:         [
+C:\Users\dmityagi\OneDrive - Intel Corporation\Desktop\cv\fix\Computer_vision_labs\opencv_test.cpp(22,31): warning C4244:             _Tp=uchar
+C:\Users\dmityagi\OneDrive - Intel Corporation\Desktop\cv\fix\Computer_vision_labs\opencv_test.cpp(22,31): warning C4244:         ]
+C:\Users\dmityagi\OneDrive - Intel Corporation\Desktop\cv\fix\Computer_vision_labs\opencv_test.cpp(23,31): warning C4244:  '=': conversion from 'double' to '_Tp', possible loss of data
+C:\Users\dmityagi\OneDrive - Intel Corporation\Desktop\cv\fix\Computer_vision_labs\opencv_test.cpp(23,31): warning C4244:         with
+C:\Users\dmityagi\OneDrive - Intel Corporation\Desktop\cv\fix\Computer_vision_labs\opencv_test.cpp(23,31): warning C4244:         [
+C:\Users\dmityagi\OneDrive - Intel Corporation\Desktop\cv\fix\Computer_vision_labs\opencv_test.cpp(23,31): warning C4244:             _Tp=uchar
+C:\Users\dmityagi\OneDrive - Intel Corporation\Desktop\cv\fix\Computer_vision_labs\opencv_test.cpp(23,31): warning C4244:         ]
+C:\Users\dmityagi\OneDrive - Intel Corporation\Desktop\cv\fix\Computer_vision_labs\opencv_test.cpp(24,31): warning C4244:  '=': conversion from 'double' to '_Tp', possible loss of data
+C:\Users\dmityagi\OneDrive - Intel Corporation\Desktop\cv\fix\Computer_vision_labs\opencv_test.cpp(24,31): warning C4244:         with
+C:\Users\dmityagi\OneDrive - Intel Corporation\Desktop\cv\fix\Computer_vision_labs\opencv_test.cpp(24,31): warning C4244:         [
+C:\Users\dmityagi\OneDrive - Intel Corporation\Desktop\cv\fix\Computer_vision_labs\opencv_test.cpp(24,31): warning C4244:             _Tp=uchar
+C:\Users\dmityagi\OneDrive - Intel Corporation\Desktop\cv\fix\Computer_vision_labs\opencv_test.cpp(24,31): warning C4244:         ]
+opencv_world450d.lib(opencv_world450d.dll) : fatal error LNK1112: module machine type 'x64' conflicts with target machine type 'x86'

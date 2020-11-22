@@ -3,7 +3,7 @@
 #include "canny.h"
 #include "edge_points.h"
 
-void DistTrans(Mat input) {
+void DistTransOpenCV(Mat input) {
 	// Creating an empty matrix to store the results
 	Mat dst, bw;
 	cvtColor(input, bw, COLOR_BGR2GRAY);
@@ -14,9 +14,34 @@ void DistTrans(Mat input) {
 	distanceTransform(bw, dst, DIST_L2, 3);
 
 	// Writing the image
-	imwrite("distnceTransform.jpg", dst);
-	Mat image_canny = imread("distnceTransform.jpg", IMREAD_COLOR);
+	imwrite("res/distnceTransformOCV.jpg", dst);
+	Mat image_canny = imread("res/distnceTransformOCV.jpg", IMREAD_COLOR);
 	imshow("distnceTransform", image_canny);
+}
+
+void DistTrans(Mat input) {
+	// Creating an empty matrix to store the results
+	Mat dst = Mat::zeros(input.rows, input.cols, CV_64FC1), bw;
+	cvtColor(input, bw, COLOR_BGR2GRAY);
+
+	//for (int r = 0; r < input.rows; r++) {
+	//	for (int c = 0; c < input.cols; c++) {
+	//		float sum = 0;
+	//		for (int l = -input.rows; l < input.rows; l++) {
+	//			for (int k = -input.cols; k < input.cols; k++) {
+	//				float a = input.at<uchar>(Point(r - l, c - k));
+	//				sum += a *(float(1) / ((2 * input.rows + 1) * (2 * input.cols + 1)));
+	//			}
+	//		}
+	//		dst.at<uchar>(Point(r, c)) = sum;
+	//		//dst.at<uchar>(Point(r, c)) += bw.at<uchar>(Point(r, c)) * (float(1)/((2 * input.rows + 1)*(2 * input.cols + 1)));
+	//	}
+	//}
+
+	// Writing the image
+	//imwrite("res/distnceTransform.jpg", dst);
+	//Mat image_canny = imread("res/distnceTransform.jpg", IMREAD_COLOR);
+	//imshow("distnceTransform", image_canny);
 }
 
 void grayscale(Mat image) { // перевод изображения в полутоновое
@@ -72,7 +97,7 @@ void contrast(Mat image) {
 	imshow("Histogram(changed)", showHist2);
 	waitKey(0);
 
-	imwrite("Histogram_stretched.jpg", out);
+	imwrite("res/Histogram_stretched.jpg", out);
 	namedWindow("Histogram stretch", WINDOW_AUTOSIZE);
 	imshow("Histogram stretch", out);
 	waitKey(0);
@@ -82,28 +107,29 @@ void canny_edge(const Mat& input, float s, bool denoise) {
 	//imshow("threshold", threshold(input, s));
 	//imshow("+ denoising", threshold(input, s, denoise));
 	imshow("canny", canny(input, s));
-	imwrite("canny.jpg", canny(input, s));
+	imwrite("res/canny.jpg", canny(input, s));
 }
 
 int main()
 {
 	// ---------------------------------------------------------------------
-	Mat image = imread("moment1.jpg", IMREAD_COLOR);
+	Mat image = imread("res/moment1.jpg", IMREAD_COLOR);
 	imshow("input", image);
 	// ---------------------------------------------------------------------
 	grayscale(image);
 	// ---------------------------------------------------------------------
 	contrast(image);
 	// ---------------------------------------------------------------------
-	Mat image_canny = imread("board.jpg", IMREAD_COLOR);
+	Mat image_canny = imread("res/board.jpg", IMREAD_COLOR);
 	imshow("input", image_canny);
 	canny_edge(image_canny, 5, true);
 	// ---------------------------------------------------------------------
-	Mat image_mor = imread("canny.jpg", IMREAD_COLOR);
+	Mat image_mor = imread("res/canny.jpg", IMREAD_COLOR);
 	Moravec(image_mor);
 	// ---------------------------------------------------------------------
-	Mat image_dist = imread("board.jpg", IMREAD_COLOR);
+	Mat image_dist = imread("res/board.jpg", IMREAD_COLOR);
 	//imshow("dist input", image_dist);
+	DistTransOpenCV(image_dist);
 	DistTrans(image_dist);
 
 	waitKey(0);
