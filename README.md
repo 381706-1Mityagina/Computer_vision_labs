@@ -1,10 +1,11 @@
 # Computer_vision_labs
 
 Tasks:
-- [ ] read image from file
-- [ ] convert the original image to grayscale
-- [ ] improve contrast
-- [ ] find edges of objects
-- [ ] find corner points
+- [x] read image from file
+- [x] convert the original image to grayscale
+- [x] improve contrast
+- [x] find edges of objects
+- [x] find corner points
 - [ ] distanse transform method
 - [ ] filtering by averaging
+ 
