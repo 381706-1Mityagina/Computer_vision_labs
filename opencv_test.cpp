@@ -1,55 +1,98 @@
-﻿#include <iostream>
+#include <iostream>
 #include "contrast.h"
 #include "canny.h"
 #include "edge_points.h"
 
+int MinMax(int value, int max) {
+	int min = 0;
+	if (value < min) return min;
+	if (value > max) return max;
+
+	return value;
+}
+
+Point getPixel(Mat grayImage, int radius, int x, int y) {
+	int size = 2 * radius + 1;
+	pair<int, Point>* neighbors = new pair<int, Point>[size * size];
+
+	for (int l = -radius; l < radius + 1; l++) {
+		for (int k = -radius; k < radius + 1; k++) {
+			int idX = MinMax(x + k, grayImage.cols - 1);
+			int idY = MinMax(y + l, grayImage.rows - 1);
+
+			neighbors[(l + radius) * size + (k + radius)] = make_pair(static_cast<int>(grayImage.at<uchar>(idY, idX)), Point(idX, idY));
+		}
+	}
+
+	sort(neighbors, neighbors + size * size, [](pair<int, Point> a, pair<int, Point> b)->bool {return a.first < b.first;});
+	Point result = (neighbors[(size * size) / 2]).second;
+	delete[]neighbors;
+
+	return result;
+}
+
+void filterUsingIntegralIm(Mat image, Mat distImage, Mat grayImage, double k) {
+	Mat integralImage, filtImage = image.clone();
+	integral(image, integralImage);
+
+	for (int i = 0; i < image.rows; i++) {
+		for (int j = 0; j < image.cols; j++) {
+			int radius = min(static_cast<int>(k * distImage.at<uchar>(Point(i, j))), 4);
+
+			Point A(MinMax(j - radius, image.cols - 1), MinMax(i - radius, image.rows - 1));
+			Point B(MinMax(j + radius, image.cols - 1), MinMax(i - radius, image.rows - 1));
+			Point C(MinMax(j + radius, image.cols - 1), MinMax(i + radius, image.rows - 1));
+			Point D(MinMax(j - radius, image.cols - 1), MinMax(i + radius, image.rows - 1));
+
+			int Summ = integralImage.at<int>(A) + integralImage.at<int>(C) - integralImage.at<int>(B) - integralImage.at<int>(D);
+
+			float S = pow((2 * radius + 1), 2);
+			filtImage.at<uchar>(Point(i, j)) = static_cast<uchar>(float(Summ) / S);
+		}
+	}
+
+	imshow("With integral image", filtImage);
+	waitKey();
+}
+
+void filterImageMedian(Mat image, Mat distImage, Mat grayImage, double k) {
+	float avrgRadius = 0.0f;
+	Mat medianImage = image.clone();
+
+	for (int i = 0; i < image.rows; i++) {
+		for (int j = 0; j < image.cols; j++) {
+			int radius = min(static_cast<int>(k * distImage.at<uchar>(Point(i, j))), 5);
+			Point coords = getPixel(grayImage, radius, i, j);
+			medianImage.at<uchar>(Point(i, j)) = image.at<uchar>(Point(coords.x, coords.y));
+			avrgRadius += radius;
+		}
+	}
+
+	namedWindow("Filter input", WINDOW_AUTOSIZE);
+	imshow("Filter input", image);
+	namedWindow("Filter output", WINDOW_AUTOSIZE);
+	imshow("Filter output", medianImage);
+	waitKey();
+}
+
 void DistTransOpenCV(Mat input) {
-	// Creating an empty matrix to store the results
 	Mat dst, bw;
 	cvtColor(input, bw, COLOR_BGR2GRAY);
 	threshold(bw, bw, 40, 255, THRESH_BINARY | THRESH_OTSU);
-	//imshow("dist biniry", bw);
 
-	// Applying distance transform
 	distanceTransform(bw, dst, DIST_L2, 3);
 
-	// Writing the image
 	imwrite("res/distnceTransformOCV.jpg", dst);
 	Mat image_canny = imread("res/distnceTransformOCV.jpg", IMREAD_COLOR);
 	imshow("distnceTransform", image_canny);
 }
 
-void DistTrans(Mat input) {
-	// Creating an empty matrix to store the results
-	Mat dst = Mat::zeros(input.rows, input.cols, CV_64FC1), bw;
-	cvtColor(input, bw, COLOR_BGR2GRAY);
-
-	//for (int r = 0; r < input.rows; r++) {
-	//	for (int c = 0; c < input.cols; c++) {
-	//		float sum = 0;
-	//		for (int l = -input.rows; l < input.rows; l++) {
-	//			for (int k = -input.cols; k < input.cols; k++) {
-	//				float a = input.at<uchar>(Point(r - l, c - k));
-	//				sum += a *(float(1) / ((2 * input.rows + 1) * (2 * input.cols + 1)));
-	//			}
-	//		}
-	//		dst.at<uchar>(Point(r, c)) = sum;
-	//		//dst.at<uchar>(Point(r, c)) += bw.at<uchar>(Point(r, c)) * (float(1)/((2 * input.rows + 1)*(2 * input.cols + 1)));
-	//	}
-	//}
-
-	// Writing the image
-	//imwrite("res/distnceTransform.jpg", dst);
-	//Mat image_canny = imread("res/distnceTransform.jpg", IMREAD_COLOR);
-	//imshow("distnceTransform", image_canny);
-}
-
-void grayscale(Mat image) { // перевод изображения в полутоновое
+void grayscale(Mat image) {
 	Mat r, g, b;
-	vector<Mat> channels(3); // вектор для каналов
+	vector<Mat> channels(3);
 	int N = image.cols * image.rows;
 
-	split(image, channels); // разделяем картинку на каналы
+	split(image, channels);
 
 	r = channels[0];
 	g = channels[1];
@@ -61,7 +104,6 @@ void grayscale(Mat image) { // перевод изображения в полу
 			r.at<uchar>(Point(i, j)) = y;
 			g.at<uchar>(Point(i, j)) = y;
 			b.at<uchar>(Point(i, j)) = y;
-			//image.at<uchar>(Point(i, j)) = y;
 		}
 	}
 	namedWindow("task 1", WINDOW_AUTOSIZE);
@@ -104,8 +146,6 @@ void contrast(Mat image) {
 }
 
 void canny_edge(const Mat& input, float s, bool denoise) {
-	//imshow("threshold", threshold(input, s));
-	//imshow("+ denoising", threshold(input, s, denoise));
 	imshow("canny", canny(input, s));
 	imwrite("res/canny.jpg", canny(input, s));
 }
@@ -120,17 +160,20 @@ int main()
 	// ---------------------------------------------------------------------
 	contrast(image);
 	// ---------------------------------------------------------------------
-	Mat image_canny = imread("res/board.jpg", IMREAD_COLOR);
+	Mat image_canny = imread("res/Histogram_stretched.jpg", IMREAD_COLOR);
 	imshow("input", image_canny);
 	canny_edge(image_canny, 5, true);
 	// ---------------------------------------------------------------------
 	Mat image_mor = imread("res/canny.jpg", IMREAD_COLOR);
 	Moravec(image_mor);
 	// ---------------------------------------------------------------------
-	Mat image_dist = imread("res/board.jpg", IMREAD_COLOR);
-	//imshow("dist input", image_dist);
+	Mat image_dist = imread("res/Histogram_stretched.jpg", IMREAD_COLOR);
+	imshow("dist input", image_dist);
 	DistTransOpenCV(image_dist);
-	DistTrans(image_dist);
+	// ---------------------------------------------------------------------
+	Mat image_dist_filt = imread("res/distnceTransformOCV.jpg", IMREAD_COLOR);
+	filterImageMedian(image, image_dist_filt, image_canny, 5);
+	filterUsingIntegralIm(image, image_dist_filt, image_canny, 5);
 
 	waitKey(0);
 	return 0;
