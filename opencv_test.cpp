@@ -39,10 +39,10 @@ void filterUsingIntegralIm(Mat image, Mat distImage, Mat grayImage, double k) {
 		for (int j = 0; j < image.cols; j++) {
 			int radius = min(static_cast<int>(k * distImage.at<uchar>(Point(i, j))), 4);
 
-			Point A(MinMax(j - radius, image.cols - 1), MinMax(i - radius, image.rows - 1));
-			Point B(MinMax(j + radius, image.cols - 1), MinMax(i - radius, image.rows - 1));
+			Point A(j - radius, i - radius);
+			Point B(MinMax(j + radius, image.cols - 1), i - radius);
 			Point C(MinMax(j + radius, image.cols - 1), MinMax(i + radius, image.rows - 1));
-			Point D(MinMax(j - radius, image.cols - 1), MinMax(i + radius, image.rows - 1));
+			Point D(j - radius, MinMax(i + radius, image.rows - 1));
 
 			int Summ = integralImage.at<int>(A) + integralImage.at<int>(C) - integralImage.at<int>(B) - integralImage.at<int>(D);
 
@@ -75,16 +75,34 @@ void filterImageMedian(Mat image, Mat distImage, Mat grayImage, double k) {
 	waitKey();
 }
 
-void DistTransOpenCV(Mat input) {
-	Mat dst, bw;
+void DistTransOpenCV(Mat input, Mat withCorners) {
+	Mat bw;
 	cvtColor(input, bw, COLOR_BGR2GRAY);
-	threshold(bw, bw, 40, 255, THRESH_BINARY | THRESH_OTSU);
+	vector<Point2f> corners;
+	
+	goodFeaturesToTrack(bw, corners, 100, 0.2, 2);
+	Scalar color(255, 255, 100, 255);
 
-	distanceTransform(bw, dst, DIST_L2, 3);
+	Mat distImage = input.clone(), edgeWithCorners = withCorners.clone();
+	double minThreshold = 40.0, maxThreshold = 255.0;
 
-	imwrite("res/distnceTransformOCV.jpg", dst);
-	Mat image_canny = imread("res/distnceTransformOCV.jpg", IMREAD_COLOR);
-	imshow("distnceTransform", image_canny);
+	for (auto it = corners.begin(); it != corners.end(); it++) {
+		circle(edgeWithCorners, *it, 10, color);
+	}
+
+	namedWindow("circle", WINDOW_AUTOSIZE);
+	imshow("circle", edgeWithCorners);
+
+	bitwise_not(edgeWithCorners, edgeWithCorners);
+
+	namedWindow("bitwise_not", WINDOW_AUTOSIZE);
+	imshow("bitwise_not", edgeWithCorners);
+	cvtColor(edgeWithCorners, edgeWithCorners, COLOR_BGR2GRAY);
+
+	distanceTransform(edgeWithCorners, distImage, DIST_L2, 3);
+	normalize(distImage, distImage, 0, 1., NORM_MINMAX);
+	namedWindow("distImage", WINDOW_AUTOSIZE);
+	imshow("distImage", distImage);
 }
 
 void grayscale(Mat image) {
@@ -153,7 +171,7 @@ void canny_edge(const Mat& input, float s, bool denoise) {
 int main()
 {
 	// ---------------------------------------------------------------------
-	Mat image = imread("res/moment1.jpg", IMREAD_COLOR);
+	Mat image = imread("res/board.jpg", IMREAD_COLOR);
 	imshow("input", image);
 	// ---------------------------------------------------------------------
 	grayscale(image);
@@ -164,14 +182,17 @@ int main()
 	imshow("input", image_canny);
 	canny_edge(image_canny, 5, true);
 	// ---------------------------------------------------------------------
-	Mat image_mor = imread("res/canny.jpg", IMREAD_COLOR);
+	Mat image_mor = imread("res/Histogram_stretched.jpg", IMREAD_COLOR);
 	Moravec(image_mor);
 	// ---------------------------------------------------------------------
-	Mat image_dist = imread("res/Histogram_stretched.jpg", IMREAD_COLOR);
-	imshow("dist input", image_dist);
-	DistTransOpenCV(image_dist);
+	Mat image_mor1 = imread("res/canny.jpg", IMREAD_COLOR);
+	Moravec(image_mor1);
 	// ---------------------------------------------------------------------
-	Mat image_dist_filt = imread("res/distnceTransformOCV.jpg", IMREAD_COLOR);
+	Mat image_dist = imread("res/mor.jpg", IMREAD_COLOR);
+	imshow("dist input", image_dist);
+	DistTransOpenCV(image, image_mor1);
+	// ---------------------------------------------------------------------
+	Mat image_dist_filt = imread("res/mor.jpg", IMREAD_COLOR);
 	filterImageMedian(image, image_dist_filt, image_canny, 5);
 	filterUsingIntegralIm(image, image_dist_filt, image_canny, 5);
 
