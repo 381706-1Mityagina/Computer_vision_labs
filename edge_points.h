@@ -51,5 +51,6 @@ void Moravec(Mat src) {
 	}
 	namedWindow("Moravec", WINDOW_AUTOSIZE);
 	imshow("Moravec", resMorMat);
+	imwrite("res/mor.jpg", resMorMat);
 	waitKey(0);
 }
